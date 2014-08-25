@@ -1,0 +1,7 @@
+Host <%= @title %>
+<% @params.each_pair do |k, v| -%>
+<%- v.each do |a| -%>
+  <%= k %> <%= a %>
+  <%- end -%>
+<% end -%> 
+

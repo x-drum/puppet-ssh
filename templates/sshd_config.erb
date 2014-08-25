@@ -1,0 +1,38 @@
+Port <%= @port %>
+ListenAddress <%= @listen_address %>
+
+Protocol 2
+HostKey /etc/ssh/ssh_host_rsa_key
+HostKey /etc/ssh/ssh_host_dsa_key
+
+SyslogFacility <%= @syslog_facility %>
+LogLevel <%= @loglevel %>
+<% if @allow_users.any? %>
+AllowUsers <%= @allow_users.join(" ") %>
+<% end %>
+<% if @allow_groups.any? -%>
+AllowGroups <%= @allow_groups.join(" ") %>
+<% end -%>
+
+PermitRootLogin <%= @permit_root_login %>
+StrictModes yes
+RSAAuthentication no
+RhostsRSAAuthentication no
+HostbasedAuthentication no
+IgnoreRhosts yes
+PermitEmptyPasswords no
+PasswordAuthentication <%= @password_authentication %>
+ChallengeResponseAuthentication <%= @password_authentication %>
+
+UsePAM <%= @use_pam %>
+
+AllowTcpForwarding <%= @allow_tcp_forwarding %>
+X11Forwarding <%= @x11_forwarding %>
+PrintMotd no
+PrintLastLog no
+UsePrivilegeSeparation yes
+UseDNS <%= @use_dns %>
+Banner none
+
+Subsystem	sftp    <%= @subsystem_sftp %>
+
