@@ -3,7 +3,7 @@
 # A class for managing ssh configuration.
 #
 # Requires:
-# puppetlabs-apache
+# puppetlabs-concat
 #
 # === Copyright
 #
@@ -14,7 +14,7 @@ class ssh::config inherits ssh::params {
   concat { $ssh::params::sshd_config:
     owner => root,
     group => root,
-    mode  => '0644',
+    mode  => '0600',
   }
 
   concat::fragment{ 'sshd_config_header':
@@ -22,22 +22,30 @@ class ssh::config inherits ssh::params {
     content => template('ssh/header.erb'),
     order => '00',
   }
+  concat::fragment{ 'sshd_config_footer':
+    target  => $ssh::params::sshd_config,
+    content => "",
+    order   => '99',
+  }
 
   concat { $ssh::params::ssh_config:
     owner => root,
     group => root,
     mode  => '0644',
   }
-
   concat::fragment{ 'ssh_config_header':
     target  => $ssh::params::ssh_config,
     content => template('ssh/header.erb'),
     order   => '00',
   }
-
   concat::fragment{ 'ssh_config_template':
     target  => $ssh::params::ssh_config,
     content => "",
     order   => '01',
+  }
+  concat::fragment{ 'ssh_config_footer':
+    target  => $ssh::params::ssh_config,
+    content => "",
+    order   => '99',
   }
 }

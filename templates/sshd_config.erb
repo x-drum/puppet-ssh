@@ -14,6 +14,13 @@ AllowUsers <%= @allow_users.join(" ") %>
 AllowGroups <%= @allow_groups.join(" ") %>
 <% end -%>
 
+<% if @deny_users.any? %>
+DenyUsers <%= @deny_users.join(" ") %>
+<% end %>
+<% if @deny_groups.any? -%>
+DenyGroups <%= @deny_groups.join(" ") %>
+<% end -%>
+
 PermitRootLogin <%= @permit_root_login %>
 StrictModes yes
 RSAAuthentication no
@@ -35,4 +42,3 @@ UseDNS <%= @use_dns %>
 Banner none
 
 Subsystem	sftp    <%= @subsystem_sftp %>
-

@@ -19,6 +19,12 @@
 # [*allowed_groups*]  
 # Allow only users whose primary/additional group matches this list.
 #
+# [*deny_users*]  
+# Deny the following logins (usernames not numerical uids) matching this list.
+#
+# [*deny_groups*]  
+# Deny users whose primary/additional group matches this list.
+#
 # [*syslog_facility*]  
 # Logging facility used when logging messages, (default AUTH).
 #
@@ -54,6 +60,11 @@
 #    port                    => 4444,
 #  }
 #
+#  ssh::server_register { "UsePrivilegeSeparation":
+#    value => "sandbox",
+#    order => '03',
+#  }
+#
 # === Copyright
 #
 # Copyright 2014 Alessio Cassibba (X-Drum), unless otherwise noted.
@@ -64,6 +75,8 @@ class ssh::server(
   $listen_address='0.0.0.0',
   $allow_users=[],
   $allow_groups=[],
+  $deny_users=[],
+  $deny_groups=[],
   $syslog_facility='auth',
   $loglevel='info',
   $permit_root_login='no',
@@ -81,9 +94,9 @@ class ssh::server(
   }
 
   concat::fragment{ 'sshd_config_template':
-    target => $ssh::params::sshd_config,
+    target  => $ssh::params::sshd_config,
     content => template('ssh/sshd_config.erb'),
-    order => '01',
+    order   => '01',
   }
 
   service { 'ssh':
@@ -95,20 +108,17 @@ class ssh::server(
     subscribe  => [Package[$ssh::params::server_package_name], File[$ssh::params::sshd_config]],
     require    => File['/etc/ssh/sshd_config'],
   }
-  
 }
 
-## register external modules (maybe it's pointless)
-define ssh::register( $content="", $order=30) {
-  if $content == "" {
-    $body = $name
-  } else {
-    $body = $content
+## Allow external modules to add sshd configuration directives
+define ssh::server_register( $value="", $order=30) {
+  if ($value == "") or (value == undef) {
+    err("Supply a valid sshd_config value for keyword ${name}")
   }
 
   concat::fragment{ "sshd_config_fragment_register_$name":
     target  => $ssh::params::sshd_config,
-    content => "$body ",
+    content => inline_template("<%= @name %> <%= @value %>\n\n"),
     order   => $order
   }
 }
