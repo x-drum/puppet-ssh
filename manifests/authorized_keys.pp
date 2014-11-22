@@ -1,27 +1,26 @@
-
-# == Define: ssh::authorized_keys
+#  Define: ssh::authorized_keys
 #
 # A defined type for managing ssh authorized keys for a given user.
 #
 # Features:
-#   * Creates homedir if requested.
-#   * Can manage different keys for a single account/file.
+#   - Creates homedir if requested.
+#   - Can manage different keys for a single account/file.
 #
-# === Parameters
+# Parameters
 #
-# [*path*]  
+# path  
 #   Pass a non standard homedirectory path (eg: for root), default: empty.
 #
-# [*keys*]  
+# keys  
 #   array of ssh keys in the canonic form (eg: ssh-rsa AAABBBCCC user@host ).
 #
-# [*ensure*]
+# ensure
 #   Ensure the presence of the given autorized_keys file, default: present.
 #   
-# [*manage_home*]  
+# manage_home  
 #   Enable home directory management, default: false.
 #
-# === Examples
+# Examples
 #
 #    ssh::authorized_keys {
 #    'root':
@@ -31,8 +30,6 @@
 #           'ssh-rsa DDDEEEFFF user2@host'
 #        ],
 #    }
-#
-# === Copyright
 #
 # Copyright 2014 Alessio Cassibba (X-Drum), unless otherwise noted.
 #

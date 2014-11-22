@@ -1,5 +1,5 @@
 name 'xdrum-ssh'
-version '0.0.2'
+version '0.0.3'
 source 'git://github.com/x-drum/puppet-ssh'
 author 'Alessio Cassibba (X-Drum)'
 license 'Apache 2.0'

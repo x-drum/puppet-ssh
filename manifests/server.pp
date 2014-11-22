@@ -1,58 +1,58 @@
-# == Class: ssh::server
+# Class: ssh::server
 #
 # A class for managing sshd server options
 # Features:
-#   * Ensures sshd_config file is present.
-#   * Configures some sane defaults.
+#   - Ensures sshd_config file is present.
+#   - Configures some sane defaults.
 #
-# === Parameters
+# Parameters
 #
-# [*port*]  
+# port  
 # Specifies the port on which the server listens for connections, (default 22).
 #
-# [*listen_address*]  
+# listen_address*  
 # Specifies the local addresses sshd(8) should listen on, (default 0.0.0.0).
 #
-# [*allowed_users*]  
+# allowed_users  
 # Allow only the following logins (usernames not numerical uids) matching this list.
 #
-# [*allowed_groups*]  
+# allowed_groups  
 # Allow only users whose primary/additional group matches this list.
 #
-# [*deny_users*]  
+# deny_users  
 # Deny the following logins (usernames not numerical uids) matching this list.
 #
-# [*deny_groups*]  
+# deny_groups  
 # Deny users whose primary/additional group matches this list.
 #
-# [*syslog_facility*]  
+# syslog_facility  
 # Logging facility used when logging messages, (default AUTH).
 #
-# [*loglevel*]  
+# loglevel  
 # Verbosity level used when logging messages, (default INFO).
 #
-# [*permit_root_login*]  
+# permit_root_login  
 # Specifies whether root can log in using ssh [yes, without-password, forced-commands-only] (default yes).
 #
-# [*password_authentication*]  
+# password_authentication  
 # Specifies whether password authentication is allowed, (default yes).
 #
-# [*allow_tcp_forwarding*]  
+# allow_tcp_forwarding  
 # Specifies whether TCP forwarding is permitted, (default no).
 #
-# [*x11_forwarding*]  
+# x11_forwarding  
 # Specifies whether X11 forwarding is permitted, (default no).
 #
-# [*use_pam*]  
+# use_pam  
 # Enables the Pluggable Authentication Module interface, (default yes).
 #
-# [*use_dns*]  
+# use_dns  
 # Lookup remote hostname and check remote IP Address, (default yes).
 #
-# [*subsystem_sftp*]  
-# Define the “sftp” file transfer subsystem, (default /usr/libexec/openssh/sftp-server).
+# subsystem_sftp  
+# Define the sftp file transfer subsystem, (default /usr/libexec/openssh/sftp-server).
 #
-# === Examples
+# Examples
 #
 #  class { 'ssh::server':
 #    permit_root_login       => 'without-password',
@@ -64,8 +64,6 @@
 #    value => "sandbox",
 #    order => '03',
 #  }
-#
-# === Copyright
 #
 # Copyright 2014 Alessio Cassibba (X-Drum), unless otherwise noted.
 #
@@ -89,8 +87,10 @@ class ssh::server(
 ) inherits ssh::params {
   include ssh::config
 
-  package { $ssh::params::server_package_name:
-    ensure => present,
+  if $ssh::params::server_package_name {
+    package { $ssh::params::server_package_name:
+      ensure => present,
+    }
   }
 
   concat::fragment{ 'sshd_config_template':
@@ -105,8 +105,21 @@ class ssh::server(
     enable     => true,
     hasstatus  => true,
     hasrestart => true,
-    subscribe  => [Package[$ssh::params::server_package_name], File[$ssh::params::sshd_config]],
+    subscribe  => File[$ssh::params::sshd_config],
     require    => File['/etc/ssh/sshd_config'],
+  }
+
+  case $::kernel {
+    FreeBSD: {
+      ini_setting { 'sshd_enable':
+        path              => "/etc/rc.conf.local",
+        ensure            => present,
+        key_val_separator => '=',
+        section           => '',
+        setting           => 'sshd_enable',
+        value             => '"YES"',
+      }
+    }
   }
 }
 

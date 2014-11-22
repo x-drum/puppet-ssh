@@ -1,50 +1,50 @@
-# == Define: ssh::sftpchroot
+# Define: ssh::sftpchroot
 #
 # A defined type for managing sftp only chroots using the ssh internal-sftp feature.
 #
 # Features:
-#   * Creates a preconfigured Match conditional block for the specified criteria.
-#   * Ensures the ownership of the target chroot directory
+#   - Creates a preconfigured Match conditional block for the specified criteria.
+#   - Ensures the ownership of the target chroot directory
 #
-# === Parameters
+# Parameters
 #
-# [*match*]  
+# match  
 #   Specify the conditional block criteria. The available criteria are User, Group, Host, LocalAddress, LocalPort, and Address.
 #
-# [*chroot_dir*]  
+# chroot_dir  
 #   Pathname of a directory to chroot to after authentication.
 #
-# [*user_dir*]  
+# user_dir  
 #   Name of the user/group writable and owned directory, default: $chrootdir/incoming.
 #
-# [*manage_home*]  
+# manage_home  
 #   Ensure presence (creation) and ownership of the chroot directory, default: false.
 #
-# [*manage_user*]  
+# manage_user  
 #   Ensure user account and posix group creation, default: false.
 #
-# [*uid*]  
+# uid  
 #   Set the numerical value of the user's ID (only used if "manage_user" is set to true).
 #
-# [*gid*]  
+# gid  
 #   Set the value of the group's ID (used for chroot_directory onwership and user account creation), default: sftponly.
 #
-# [*mode*]  
+# mode  
 #   Set the default mode for user's writable and owned directory (see: user_dir), default: 0755.
 #
-# [*user_hash*]  
+# user_hash  
 #   Set the already encrypted password (hash) for the given user account (only used if "manage_user" is set to true).
 #
-# [*user_key*]  
+# user_key  
 #   Set the ssh key in $home_dir/.ssh/ssh_authorized_keys for the given user account (only used if "manage_user" is set to true).
 #
-# [*user_keytype*]  
+# user_keytype  
 #   Specifyt the default ssh key type for a given ssh key (only used if "manage_user" is set to true), default: rsa.
 #
-# [*template*]  
+# template  
 #   Path of the custom template to use as sftpchroot snippet.
 #
-# === Examples
+# Examples
 #
 #  class { 'ssh::server':
 #    ..
@@ -99,8 +99,6 @@
 #     ForceCommand internal-sftp
 #     X11Forwarding no
 #     AllowTcpForwarding no
-#
-# === Copyright
 #
 # Copyright 2014 Alessio Cassibba (X-Drum), unless otherwise noted.
 #
@@ -196,8 +194,8 @@ define ssh::sftpchroot (
     file { 
       "${chroot_dir}":
         ensure => directory,
-        owner  => 'root',
-        group  => 'root',
+        owner  => $ssh::params::sshd_owner,
+        group  => $ssh::params::sshd_group,
         mode   => '0755';
       "${chroot_dir}/${my_user_dir}":
         ensure  => directory,

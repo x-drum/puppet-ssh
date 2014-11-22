@@ -1,19 +1,17 @@
-# == Class: ssh::config
+# Class: ssh::config
 #
 # A class for managing ssh configuration.
 #
 # Requires:
 # puppetlabs-concat
 #
-# === Copyright
-#
 # Copyright 2014 Alessio Cassibba (X-Drum), unless otherwise noted.
 #
 class ssh::config inherits ssh::params {
 
   concat { $ssh::params::sshd_config:
-    owner => root,
-    group => root,
+    owner => $ssh::params::sshd_owner,
+    group => $ssh::params::sshd_group,
     mode  => '0600',
   }
 
@@ -29,8 +27,8 @@ class ssh::config inherits ssh::params {
   }
 
   concat { $ssh::params::ssh_config:
-    owner => root,
-    group => root,
+    owner => $ssh::params::sshd_owner,
+    group => $ssh::params::sshd_group,
     mode  => '0644',
   }
   concat::fragment{ 'ssh_config_header':

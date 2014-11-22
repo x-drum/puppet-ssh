@@ -1,15 +1,13 @@
-# == Define: ssh::client
+# Define: ssh::client
 #
 # A defined type for managing ssh client options
 # Features:
-#   * Setting various options
+#   - Setting various options
 #
-# === Parameters
-#
-# [*params*]
+# params
 #   all possible and allowed parameters in key => value format
 #
-# === Examples
+# Examples
 #
 #  ssh::client {
 #    'client.domain.tld':
@@ -23,8 +21,6 @@
 #  Host *
 #    SendEnv LANG LC_*
 #    GSSAPIAuthentication no
-#
-# === Copyright
 #
 # Copyright 2014 Alessio Cassibba (X-Drum), unless otherwise noted.
 #
