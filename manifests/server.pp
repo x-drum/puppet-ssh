@@ -108,19 +108,6 @@ class ssh::server(
     subscribe  => File[$ssh::params::sshd_config],
     require    => File['/etc/ssh/sshd_config'],
   }
-
-  case $::kernel {
-    FreeBSD: {
-      ini_setting { 'sshd_enable':
-        path              => "/etc/rc.conf.local",
-        ensure            => present,
-        key_val_separator => '=',
-        section           => '',
-        setting           => 'sshd_enable',
-        value             => '"YES"',
-      }
-    }
-  }
 }
 
 ## Allow external modules to add sshd configuration directives
