@@ -99,14 +99,14 @@ class ssh::server(
     order   => '01',
   }
 
-  service { 'ssh':
+  service { $ssh::params::service_name:
     ensure     => running,
     name       => $ssh::params::service_name,
     enable     => true,
     hasstatus  => true,
     hasrestart => true,
     subscribe  => File[$ssh::params::sshd_config],
-    require    => File['/etc/ssh/sshd_config'],
+    require    => File[$ssh::params::sshd_config],
   }
 }
 
