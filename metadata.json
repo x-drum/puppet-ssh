@@ -1,0 +1,30 @@
+{
+  "name": "xdrum-ssh",
+  "version": "0.0.3",
+  "author": "Alessio Cassibba (X-Drum)",
+  "summary": "Openssh Module",
+  "license": "Apache 2.0",
+  "source": "git://github.com/x-drum/puppet-ssh",
+  "project_page": "https://github.com/x-drum/puppet-ssh",
+  "issues_url": "https://github.com/x-drum/puppet-ssh/issues",
+  "description": "Configure and install openssh.",
+  "tags": [
+    "ubuntu",
+    "debian",
+    "ssh",
+    "sshd",
+    "openssh",
+    "opensshd",
+    "freebsd",
+    "gentoo",
+    "archlinux",
+    "centos",
+    "rhel"
+  ],
+  "dependencies": [
+    {
+      "name": "puppetlabs-concat",
+      "version_requirement": ">= 1.0.2"
+    }
+  ]
+}
